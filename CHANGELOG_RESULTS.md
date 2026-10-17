@@ -48,3 +48,20 @@ Evaluated with `python src/evaluate.py --results-dir tests/fixtures/baseline_v0/
    - Mock outputs are saved under `results_mock/` and clearly stamped `MOCK DATA`.
    - Real model evaluation runs are stored under `results/`.
 3. **Guardrails:** `src/evaluate.py` will actively abort if mock and real outputs are present in the same results directory.
+
+---
+
+## 3. Upgrades and Schema Changes (Brief C Phase 2)
+
+- **Date:** 2026-10-17
+- **Git Branch:** `research/kg-upgrade`
+- **Schema Version:** `v1.0.0`
+- **Key Enhancements:**
+  1. **System A3 Implementation (`kg_rules`):** Integrated `src/rules.py` with official Excludes1 conflict detection and hierarchy redundancy resolution, auditing all diagnostic decisions.
+  2. **EntityLinker (`src/linker.py`):** Added pharmacology-to-condition linkage from `src/templates/conditions.yaml` to seed and expand KG retrieval.
+  3. **Hierarchical Metrics (`src/metrics.py`):** Implemented `hierarchical_f1`, `hierarchical_precision`, `hierarchical_recall`, and `rule_violation_rate`.
+  4. **Official Paper Tables Generator (`src/make_tables.py`):** Automated generation of Brief B Tables III through IX in Markdown and CSV formats.
+  5. **Chapter U Code Support (`src/codes.py`, `src/parser.py`):** Expanded regex `^[A-TV-Z]` to `^[A-Z]` to accept official CDC FY2024 Chapter 22 emergency codes (`U07.0`, `U07.1`, `U09.9`).
+  6. **Ablation Split Isolation (`src/ablations.py`):** Targeted `--split dev` by default to preserve holdout integrity on `eval.jsonl`.
+  7. **Clinical Privacy Guard (`src/data_prep.py`):** Added automated validation ensuring destination paths for clinical data are covered by `.gitignore`.
+  8. **Reproducibility Lockfile:** Committed `requirements-lock.txt` with exact package pins.

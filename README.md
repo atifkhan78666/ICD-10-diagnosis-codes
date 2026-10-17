@@ -1,23 +1,16 @@
-# ICD-10-CM coding with open-weight LLMs: four prompting strategies
+# ICD-10-CM Coding with Open-Weight LLMs: Knowledge Graph & Rule Systems
 
-This project compares four ways of giving an LLM evidence for ICD-10-CM coding, under the
-same prompt, parser, data and evaluation:
+This repository evaluates evidence-grounded prompting and retrieval strategies for autonomous ICD-10-CM clinical coding, comparing Systems A0 through A3 under prompt invariance, rigorous evaluation, and official coding guidelines:
 
-| Strategy | Evidence the model sees | Where it comes from |
-|---|---|---|
-| `zero_shot` | nothing extra | prompt only |
-| `few_shot` | 5 worked examples | fixed, seeded pool, disjoint from the evaluation records |
-| `rag` | top-20 candidate codes | MiniLM search over official code descriptions |
-| `kg` | top-20 candidate codes | **hybrid**: the same MiniLM seeds, expanded with the official parent and child codes |
+| System / Strategy | Study Role | Evidence the Model Sees | Evidence Source & Logic |
+|---|---|---|---|
+| `zero_shot` | System A0 | None (standard prompt only) | Context note text only |
+| `few_shot` | Baseline Arm | 5 worked examples | Seeded, disjoint pool from fewshot_pool.jsonl |
+| `rag` | System A1 | Top-20 candidate codes | Semantic search (MiniLM) over official code descriptions |
+| `kg` | System A2 | Top-20 candidate codes | Hybrid: Semantic seeds + official CDC tabular hierarchy expansion (parents/children) |
+| `kg_rules` | System A3 | Top-20 candidates + Rule Verdict | Hybrid KG retrieval + Clinical Rule Engine & Verdict (Excludes1 and hierarchy redundancy resolution) |
 
-`kg` is a hybrid, not a full knowledge graph. Semantic search picks up to 10 seed codes.
-Each seed adds its direct parent and up to 5 direct children, taken from the official
-ICD-10-CM 2024 tabular hierarchy. The pool is capped at 20, the same as RAG. No relation is
-invented.
-
-The strategies differ only in the evidence block. The system text, instruction, record,
-answer format, decoding settings, seed, dataset, parser and metrics are the same
-(`tests/test_strategies.py` checks this).
+The strategies strictly preserve prompt invariance outside the evidence slot. The system text, instruction, record, answer format, decoding settings, seed, dataset, parser and metrics are controlled.
 
 ---
 
