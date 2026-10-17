@@ -4,6 +4,7 @@ import os
 import re
 import pandas as pd
 import yaml
+import subprocess
 import sys
 from pathlib import Path
 from typing import Dict, Any, List, Optional
@@ -25,6 +26,18 @@ def normalize_icd(code: str) -> str:
         if len(code) > 3:
             return f"{code[:3]}.{code[3:]}"
         return code
+
+def check_privacy_guard(path: Path) -> None:
+    """Ensure sensitive clinical data destination is git-ignored to prevent data leaks."""
+    try:
+        res = subprocess.run(["git", "check-ignore", "-q", str(path)], capture_output=True)
+        if res.returncode != 0:
+            logging.warning(
+                f"PRIVACY GUARD WARNING: Output path '{path}' is not ignored by git. "
+                "Ensure that sensitive clinical data is never tracked by version control."
+            )
+    except Exception as e:
+        logging.debug(f"Could not run git check-ignore: {e}")
 
 def extract_clinical_sections(text: str) -> str:
     """
@@ -174,6 +187,7 @@ def process_mimic_data(config_path: str) -> None:
             logging.warning("Discharge Diagnosis text sits close to the label and may cause data leakage.")
 
     # Save processed data
+    check_privacy_guard(out_path)
     output_notes_path = out_path / "processed_notes.csv"
     output_diag_path = out_path / "processed_diagnoses.csv"
 

@@ -143,11 +143,14 @@ def run_k_ablation(
     with open(base_config_path, "r", encoding="utf-8") as f:
         base_cfg = yaml.safe_load(f)
 
-    # Dataset path
+    # Dataset path - default to dev split to prevent test-set contamination (Brief A §7.1 / Brief C §1.3)
     data_dir = Path("data/synthetic/run01")
-    eval_path = data_dir / "eval.jsonl"
-    if not eval_path.exists():
-        raise FileNotFoundError(f"Synthetic evaluation dataset not found at {eval_path}")
+    split = config.get("split", "dev")
+    split_path = data_dir / f"{split}.jsonl"
+    if not split_path.exists():
+        logger.warning(f"{split_path} not found. Falling back to eval.jsonl.")
+        split_path = data_dir / "eval.jsonl"
+        split = "eval"
 
     rows = []
     reports_dir = ensure_dir(Path("reports"))
@@ -180,6 +183,10 @@ def run_k_ablation(
             backend,
             "--strategies",
             "rag",
+            "--split",
+            split,
+            "--data",
+            str(split_path),
             "--out",
             str(run_out_dir),
         ]
@@ -190,7 +197,7 @@ def run_k_ablation(
         subprocess.run(cmd, check=True)
 
         actual_dir = Path(f"{run_out_dir}_smoke") if limit else run_out_dir
-        metrics = evaluate_run_dir(actual_dir, eval_path, vocab_path)
+        metrics = evaluate_run_dir(actual_dir, split_path, vocab_path)
 
         rows.append({
             "k": k,
@@ -227,10 +234,14 @@ def run_embedder_ablation(
 ) -> None:
     """Run embedder ablation: all-MiniLM-L6-v2 vs pritamdeka/S-PubMedBert-MS-MARCO."""
     variants = config.get("variants", [])
-    results_root = Path("results_mock" if backend == "mock" else "results")
     vocab_path = Path("data/vocab/icd10cm_2024.jsonl")
     data_dir = Path("data/synthetic/run01")
-    eval_path = data_dir / "eval.jsonl"
+    split = config.get("split", "dev")
+    split_path = data_dir / f"{split}.jsonl"
+    if not split_path.exists():
+        logger.warning(f"{split_path} not found. Falling back to eval.jsonl.")
+        split_path = data_dir / "eval.jsonl"
+        split = "eval"
 
     with open(base_config_path, "r", encoding="utf-8") as f:
         base_cfg = yaml.safe_load(f)
@@ -264,6 +275,10 @@ def run_embedder_ablation(
             backend,
             "--strategies",
             "rag",
+            "--split",
+            split,
+            "--data",
+            str(split_path),
             "--out",
             str(run_out_dir),
         ]
@@ -272,7 +287,7 @@ def run_embedder_ablation(
 
         subprocess.run(cmd, check=True)
         actual_dir = Path(f"{run_out_dir}_smoke") if limit else run_out_dir
-        metrics = evaluate_run_dir(actual_dir, eval_path, vocab_path)
+        metrics = evaluate_run_dir(actual_dir, split_path, vocab_path)
 
         rows.append({
             "Embedder": label,

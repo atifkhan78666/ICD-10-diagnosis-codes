@@ -1,4 +1,4 @@
-.PHONY: setup vocab data index smoke phase1 evaluate test phase2 significance ablations clean
+.PHONY: setup vocab data index kg-build smoke phase1 evaluate tables test phase2 significance ablations clean
 
 PYTHON ?= python
 CONFIG ?= configs/phase1.yaml
@@ -24,17 +24,25 @@ data:
 		--out $(SYNTH_DIR)
 	@echo "✓ Synthetic data generated"
 
-# ── M3: Retrieval index ────────────────────────────────────────────────────
+# ── M3: Retrieval index & KG Hierarchy ────────────────────────────────────
 index:
 	@echo "Index is built on first RAG run. To pre-build:"
 	@echo "  python -c 'from src.retrieval import build_index; from src.vocab import Vocabulary; v=Vocabulary.load_or_download({}); build_index(\"sentence-transformers/all-MiniLM-L6-v2\", v, \"data/index/sentence-transformers_all-MiniLM-L6-v2\")'"
+
+kg-build:
+	$(PYTHON) src/kg.py build \
+		--zip data/raw/icd10cm-Table-and-Index-2024.zip \
+		--xml data/raw/icd10cm_tabular_2024.xml \
+		--vocab data/vocab/icd10cm_2024.jsonl \
+		--out data/kg/icd10cm_2024_hierarchy.jsonl
+	@echo "✓ Knowledge Graph hierarchy built"
 
 # ── M4: Smoke test (mock) ─────────────────────────────────────────────────
 smoke:
 	$(PYTHON) src/run_experiment.py \
 		--config $(CONFIG) \
 		--backend mock \
-		--strategies zero_shot few_shot rag \
+		--strategies zero_shot few_shot rag kg \
 		--limit 20 \
 		--out $(RESULTS_MOCK_DIR)
 	$(PYTHON) src/evaluate.py \
@@ -50,7 +58,7 @@ phase1:
 	$(PYTHON) src/run_experiment.py \
 		--config $(CONFIG) \
 		--models llama3 biomistral \
-		--strategies zero_shot few_shot rag \
+		--strategies zero_shot few_shot rag kg \
 		--split eval \
 		--out $(RESULTS_DIR)
 	@echo "✓ Phase 1 inference complete"
@@ -63,6 +71,15 @@ evaluate:
 		--vocab data/vocab/icd10cm_2024.jsonl \
 		--dump-invalid 5
 	@echo "✓ Evaluation complete. See reports/"
+
+tables:
+	$(PYTHON) src/make_tables.py \
+		--results-dir $(RESULTS_DIR) \
+		--data $(SYNTH_DIR)/eval.jsonl \
+		--vocab data/vocab/icd10cm_2024.jsonl \
+		--hierarchy data/kg/icd10cm_2024_hierarchy.jsonl \
+		--out reports/
+	@echo "✓ Brief B Tables III-IX generated in reports/"
 
 # ── Tests ──────────────────────────────────────────────────────────────────
 test:
