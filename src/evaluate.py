@@ -61,6 +61,8 @@ def sort_key(row):
         'Few-Shot': 2,
         'RAG': 3,
         'KG': 4,
+        'KG + Rules (A3)': 5,
+        'KG + Rules': 5,
     }.get(row.get('Strategy', ''), 99)
 
     model_order = [
@@ -181,6 +183,7 @@ def main():
             'few_shot': 'Few-Shot (k=5)',
             'rag': 'RAG',
             'kg': 'KG',
+            'kg_rules': 'KG + Rules (A3)',
         }
         strategy = strategy_map.get(strategy, strategy)
 
@@ -262,7 +265,7 @@ def main():
         gpu = records[0].get('gpu', 'unknown') if records else 'unknown'
 
         candidate_recall = 0.0
-        if strategy in ("RAG", "KG"):
+        if strategy in ("RAG", "KG", "KG + Rules (A3)", "KG + Rules"):
             candidate_recalls = []
             for r, g in zip(records, gold_sets):
                 raw_cands = r.get('retrieved', [])

@@ -211,7 +211,7 @@ class KGRetriever:
     """
 
     def __init__(self, base_retriever: Any, hierarchy: Hierarchy, k: int = 20,
-                 seed_k: int = 10, max_children: int = 5):
+                 seed_k: int = 10, max_children: int = 5, linker: Optional[Any] = None):
         if seed_k < 1 or max_children < 0 or k < 1:
             raise ValueError("k and seed_k must be >= 1, max_children >= 0")
         self.base = base_retriever
@@ -219,11 +219,13 @@ class KGRetriever:
         self.k = k
         self.seed_k = seed_k
         self.max_children = max_children
+        self.linker = linker
 
     def retrieve(self, record: Dict[str, Any]):
         from retrieval import Candidate  # local import keeps module importable without torch
 
-        seeds = self.base.retrieve(retrieval_view(record))[: self.seed_k]
+        clean_rec = retrieval_view(record)
+        seeds = self.base.retrieve(clean_rec)[: self.seed_k]
         out: List[Candidate] = []
         seen = set()
 
@@ -235,7 +237,15 @@ class KGRetriever:
 
         for s in seeds:
             add(s.code, s.desc or self.hierarchy.desc.get(s.code, ""), s.score, s.source_query)
-        for s in seeds:
+
+        # Include linked medication/concept candidates if linker is configured
+        if self.linker is not None:
+            linker_cands = self.linker.link_record(clean_rec)
+            for lc in linker_cands:
+                code = lc["code"]
+                add(code, self.hierarchy.desc.get(code, ""), lc["score"], lc["source_query"])
+
+        for s in list(seeds):
             if len(out) >= self.k:
                 break
             parent = self.hierarchy.parent_of(s.code)

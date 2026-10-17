@@ -230,3 +230,70 @@ def micro_precision_recall(pred_sets: List[Set[str]], gold_sets: List[Set[str]])
     recall = (tp / (tp + fn)) if (tp + fn) > 0 else 0.0
     return precision, recall
 
+
+def expand_ancestors(code: str, hierarchy: object) -> Set[str]:
+    """Expand an ICD-10 code to include itself and all ancestor nodes up to the category root."""
+    nodes = {code}
+    # Add category prefix if dotted (e.g. E11.9 -> E11)
+    if "." in code:
+        nodes.add(code.split(".")[0])
+    if hierarchy is not None and hasattr(hierarchy, "parent_of"):
+        curr = hierarchy.parent_of(code)
+        while curr is not None:
+            nodes.add(curr)
+            curr = hierarchy.parent_of(curr)
+    return nodes
+
+
+def hierarchical_precision_recall(
+    pred_sets: List[Set[str]],
+    gold_sets: List[Set[str]],
+    hierarchy: object,
+) -> Tuple[float, float]:
+    """Micro-averaged hierarchical precision and recall over ancestor-expanded graphs."""
+    tp = fp = fn = 0
+    for p, g in zip(pred_sets, gold_sets):
+        p_anc: Set[str] = set()
+        for code in p:
+            p_anc.update(expand_ancestors(code, hierarchy))
+
+        g_anc: Set[str] = set()
+        for code in g:
+            g_anc.update(expand_ancestors(code, hierarchy))
+
+        tp += len(p_anc & g_anc)
+        fp += len(p_anc - g_anc)
+        fn += len(g_anc - p_anc)
+
+    precision = (tp / (tp + fp)) if (tp + fp) > 0 else 0.0
+    recall = (tp / (tp + fn)) if (tp + fn) > 0 else 0.0
+    return precision, recall
+
+
+def hierarchical_f1(
+    pred_sets: List[Set[str]],
+    gold_sets: List[Set[str]],
+    hierarchy: object,
+) -> float:
+    """Micro-averaged hierarchical F1 score over ancestor-expanded graph nodes (Brief B §7.3)."""
+    p, r = hierarchical_precision_recall(pred_sets, gold_sets, hierarchy)
+    denom = p + r
+    return (2 * p * r / denom) if denom > 0 else 0.0
+
+
+def rule_violation_rate(
+    pred_lists: List[List[str]],
+    rule_engine: object,
+    hierarchy: Optional[object] = None,
+) -> float:
+    """Fraction of instances with at least one clinical coding guideline violation (Brief B §7.4)."""
+    if not pred_lists or rule_engine is None:
+        return 0.0
+    violations_count = 0
+    for preds in pred_lists:
+        if hasattr(rule_engine, "check_violations"):
+            v = rule_engine.check_violations(preds, hierarchy)
+            if len(v) > 0:
+                violations_count += 1
+    return violations_count / len(pred_lists)
+

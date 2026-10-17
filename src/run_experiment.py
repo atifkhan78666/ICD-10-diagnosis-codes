@@ -35,6 +35,8 @@ from prompts import (
 from backends import HFBackend, MockBackend, create_backend
 from retrieval import retrieval_view
 from kg import Hierarchy, KGRetriever
+from linker import EntityLinker
+from rules import RuleEngine
 from utils import (
     seed_everything, sha256_file, sha256_str, atomic_write,
     atomic_jsonl_append, gpu_info, library_versions, git_commit,
@@ -260,7 +262,7 @@ def parse_args():
     p.add_argument("--config", required=True, help="Path to YAML config")
     p.add_argument("--models", nargs="+", help="Model keys (e.g., llama3 biomistral)")
     p.add_argument("--strategies", nargs="+",
-                    choices=["zero_shot", "few_shot", "rag", "kg"],
+                    choices=["zero_shot", "few_shot", "rag", "kg", "kg_rules"],
                     help="Strategies to run")
     p.add_argument("--split", default="eval", help="Dataset split")
     p.add_argument("--data", help="Direct path to dataset JSONL (e.g. data/synthetic/run01/eval.jsonl)")
@@ -434,8 +436,8 @@ def main():
                     logger.error("No few-shot examples available, skipping")
                     continue
                 evidence_provider = FewShotEvidence(shots)
-            elif strategy in ("rag", "kg"):
-                # RAG and KG share one semantic retriever (same index, embedder, windows).
+            elif strategy in ("rag", "kg", "kg_rules"):
+                # RAG, KG, and KG_Rules share one semantic retriever (same index, embedder, windows).
                 use_mock = backend_info.get("backend") == "mock"
                 retriever = get_semantic_retriever(
                     config, retriever_cache, mock=use_mock,
@@ -454,12 +456,14 @@ def main():
                             f"strategies.rag.k ({rag_k_cfg}) so both arms get the same pool size."
                         )
                     hierarchy = load_kg_hierarchy(config)
+                    linker = EntityLinker() if (strategy == "kg_rules" or kg_cfg.get("use_linker", False)) else None
                     evidence_provider = RAGEvidence(KGRetriever(
                         retriever,
                         hierarchy,
                         k=kg_cfg.get("k", 20),
                         seed_k=kg_cfg.get("seed_k", 10),
                         max_children=kg_cfg.get("max_children", 5),
+                        linker=linker,
                     ))
             else:
                 logger.warning(f"Unknown strategy '{strategy}', skipping")
@@ -517,9 +521,19 @@ def main():
                     generation_truncated=bool(gen_result.generation_truncated),
                 )
 
-                # Build retrieved info for RAG
+                rule_violations = []
+                verdict_audit = []
+                raw_parsed_codes = list(parsed_codes)
+
+                if strategy == "kg_rules":
+                    rule_engine = RuleEngine()
+                    hierarchy = load_kg_hierarchy(config)
+                    rule_violations = rule_engine.check_violations(raw_parsed_codes, hierarchy)
+                    parsed_codes, verdict_audit = rule_engine.apply_verdict(raw_parsed_codes, hierarchy)
+
+                # Build retrieved info for RAG/KG
                 retrieved_info = []
-                if strategy in ("rag", "kg") and hasattr(evidence_provider, "retriever"):
+                if strategy in ("rag", "kg", "kg_rules") and hasattr(evidence_provider, "retriever"):
                     try:
                         cands = evidence_provider.retriever.retrieve(retrieval_view(record))
                         retrieved_info = [
@@ -548,8 +562,11 @@ def main():
                     "compute_dtype": backend_info.get("dtype", ""),
                     "parse_mode": parse_mode,
                     "raw_output": gen_result.text,
+                    "raw_parsed_codes": raw_parsed_codes,
                     "parsed_codes": parsed_codes,
-                    "retrieved": retrieved_info if strategy in ("rag", "kg") else [],
+                    "violations": rule_violations,
+                    "verdict_audit": verdict_audit,
+                    "retrieved": retrieved_info if strategy in ("rag", "kg", "kg_rules") else [],
                     "shots": shot_ids if strategy == "few_shot" else [],
                     "latency_s": gen_result.latency_s,
                     "gpu": backend_info.get("device", ""),
