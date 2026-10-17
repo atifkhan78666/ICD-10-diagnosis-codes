@@ -12,7 +12,8 @@ import sys
 from pathlib import Path
 
 import pytest
-import torch
+
+torch = pytest.importorskip("torch", reason="torch required for generation truncation backend tests")
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))

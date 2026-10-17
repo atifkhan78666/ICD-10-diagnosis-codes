@@ -3,6 +3,7 @@ import json
 import logging
 import hashlib
 import urllib.request
+import zipfile
 import argparse
 from pathlib import Path
 
@@ -85,17 +86,61 @@ class Vocabulary:
                         codes.append(json.loads(line))
             return cls(codes)
 
-        # Needs processing. Check if raw file exists, else download.
+        # Needs processing. Check if raw file exists, else download or extract.
         raw_file = Path(raw_path)
         if not raw_file.exists():
-            logger.info(f"Raw file {raw_path} not found. Attempting to download from {url}")
             raw_file.parent.mkdir(parents=True, exist_ok=True)
-            try:
-                urllib.request.urlretrieve(url, raw_file)
-                logger.info(f"Successfully downloaded to {raw_path}")
-            except Exception as e:
-                logger.error(f"Download failed: {e}")
-                raise RuntimeError(f"Could not download vocabulary. Please place the CDC order file manually at {raw_path}") from e
+            extracted = False
+            # Check if any zip file with the order file exists in data/raw
+            for zpath in raw_file.parent.glob("*.zip"):
+                try:
+                    with zipfile.ZipFile(zpath, "r") as zf:
+                        for member in zf.namelist():
+                            if "order" in member.lower() and member.endswith(".txt"):
+                                logger.info(f"Extracting {member} from {zpath} to {raw_path}")
+                                with zf.open(member) as src, open(raw_file, "wb") as dst:
+                                    dst.write(src.read())
+                                extracted = True
+                                break
+                except Exception:
+                    continue
+                if extracted:
+                    break
+
+            if not extracted:
+                logger.info(f"Raw file {raw_path} not found. Attempting to download from {url}")
+                try:
+                    urllib.request.urlretrieve(url, raw_file)
+                    logger.info(f"Successfully downloaded to {raw_path}")
+                except Exception as e:
+                    logger.warning(f"Direct download from {url} failed: {e}. Trying CDC zip archive...")
+                    fallback_zips = [
+                        "https://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10CM/2024/icd10cm-Code%20Descriptions-2024.zip",
+                        "https://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10CM/2024/icd10cm-CodesDescriptions-2024.zip",
+                    ]
+                    for zurl in fallback_zips:
+                        try:
+                            temp_zip = raw_file.parent / "temp_order_archive.zip"
+                            urllib.request.urlretrieve(zurl, temp_zip)
+                            with zipfile.ZipFile(temp_zip, "r") as zf:
+                                for member in zf.namelist():
+                                    if "order" in member.lower() and member.endswith(".txt"):
+                                        logger.info(f"Extracting {member} from downloaded zip to {raw_path}")
+                                        with zf.open(member) as src, open(raw_file, "wb") as dst:
+                                            dst.write(src.read())
+                                        extracted = True
+                                        break
+                            if temp_zip.exists():
+                                temp_zip.unlink()
+                            if extracted:
+                                break
+                        except Exception:
+                            if temp_zip.exists():
+                                temp_zip.unlink()
+                            continue
+                    if not extracted:
+                        logger.error(f"Download failed: {e}")
+                        raise RuntimeError(f"Could not download vocabulary. Please place the CDC order file manually at {raw_path}") from e
 
         # Calculate SHA256 of raw file
         sha256_hash = hashlib.sha256()

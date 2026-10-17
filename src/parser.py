@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 # Regex for extracting code-like tokens from free text.
 # Slightly more permissive than WELL_FORMED_PATTERN to catch undotted codes.
-_CODE_EXTRACTOR = re.compile(r'\b([A-TV-Z][0-9][0-9AB](?:\.[0-9A-TV-Z]{1,4})?)\b')
+_CODE_EXTRACTOR = re.compile(r'\b([A-Z][0-9][0-9A-Z](?:\.[0-9A-Z]{1,4})?)\b')
 
 
 _CUT_OFF_TAIL = re.compile(r'[.\w]*')

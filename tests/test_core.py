@@ -277,13 +277,15 @@ def test_well_formed_valid():
     assert is_well_formed('I10')
     assert is_well_formed('J44.9')
     assert is_well_formed('Z99.9')
+    assert is_well_formed('U07.1')  # Chapter 22 (COVID-19)
 
 def test_well_formed_invalid():
     from codes import is_well_formed
-    assert not is_well_formed('11.9')  # no letter prefix
-    assert not is_well_formed('EE1.9')  # wrong format
-    assert not is_well_formed('')
-    assert not is_well_formed('U11.9')  # U is not in [A-T, V-Z]
+    assert not is_well_formed('11.9')   # no letter prefix
+    assert not is_well_formed('EE1.9')  # wrong format (two letters)
+    assert not is_well_formed('')       # empty string
+    assert not is_well_formed('E1')     # too short
+    assert not is_well_formed('E1111.9')  # too many characters before dot
 
 def test_vocab_layout_assertion():
     """A corrupted line in the order file should trigger an assertion."""

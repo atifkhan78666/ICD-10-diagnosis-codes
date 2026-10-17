@@ -59,7 +59,7 @@ class _FakeModel:
 
 
 def test_actual_dtype_reads_linear4bit_layers():
-    import torch
+    torch = pytest.importorskip("torch")
     Linear4bit = type("Linear4bit", (), {})
     layer = Linear4bit()
     layer.compute_dtype = torch.float16
