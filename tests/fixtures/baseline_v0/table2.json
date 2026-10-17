@@ -1,0 +1,53 @@
+{
+  "config_hashes": {},
+  "rows": [
+    {
+      "Model": "mock",
+      "Strategy": "Zero-Shot",
+      "n": 20,
+      "Precision": 0.1,
+      "Recall": 0.06451612903225806,
+      "Micro-F1": 0.0784313725490196,
+      "Macro-F1": 0.010732323232323232,
+      "P@5": NaN,
+      "P@8": NaN,
+      "Invalid Code Rate": 0.0
+    },
+    {
+      "Model": "mock",
+      "Strategy": "Few-Shot (k=5)",
+      "n": 20,
+      "Precision": 0.1,
+      "Recall": 0.06451612903225806,
+      "Micro-F1": 0.0784313725490196,
+      "Macro-F1": 0.010732323232323232,
+      "P@5": NaN,
+      "P@8": NaN,
+      "Invalid Code Rate": 0.0
+    },
+    {
+      "Model": "mock",
+      "Strategy": "RAG",
+      "n": 20,
+      "Precision": 0.1,
+      "Recall": 0.06451612903225806,
+      "Micro-F1": 0.0784313725490196,
+      "Macro-F1": 0.010732323232323232,
+      "P@5": NaN,
+      "P@8": NaN,
+      "Invalid Code Rate": 0.0
+    },
+    {
+      "Model": "mock",
+      "Strategy": "KG",
+      "n": 20,
+      "Precision": 0.1,
+      "Recall": 0.06451612903225806,
+      "Micro-F1": 0.0784313725490196,
+      "Macro-F1": 0.010732323232323232,
+      "P@5": NaN,
+      "P@8": NaN,
+      "Invalid Code Rate": 0.0
+    }
+  ]
+}

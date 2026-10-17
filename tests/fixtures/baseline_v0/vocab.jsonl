@@ -1,0 +1,84 @@
+{"code": "E11.9", "is_billable": true, "short_desc": "type 2 diabetes mellitus", "long_desc": "type 2 diabetes mellitus"}
+{"code": "I10", "is_billable": true, "short_desc": "essential hypertension", "long_desc": "essential hypertension"}
+{"code": "E78.5", "is_billable": true, "short_desc": "hyperlipidemia", "long_desc": "hyperlipidemia"}
+{"code": "J44.9", "is_billable": true, "short_desc": "COPD", "long_desc": "COPD"}
+{"code": "I48.91", "is_billable": true, "short_desc": "atrial fibrillation", "long_desc": "atrial fibrillation"}
+{"code": "E03.9", "is_billable": true, "short_desc": "hypothyroidism", "long_desc": "hypothyroidism"}
+{"code": "K21.9", "is_billable": true, "short_desc": "GERD", "long_desc": "GERD"}
+{"code": "J45.909", "is_billable": true, "short_desc": "asthma", "long_desc": "asthma"}
+{"code": "G47.33", "is_billable": true, "short_desc": "obstructive sleep apnea", "long_desc": "obstructive sleep apnea"}
+{"code": "I50.9", "is_billable": true, "short_desc": "heart failure", "long_desc": "heart failure"}
+{"code": "E66.9", "is_billable": true, "short_desc": "obesity", "long_desc": "obesity"}
+{"code": "D64.9", "is_billable": true, "short_desc": "anemia", "long_desc": "anemia"}
+{"code": "E55.9", "is_billable": true, "short_desc": "vitamin D deficiency", "long_desc": "vitamin D deficiency"}
+{"code": "M10.9", "is_billable": true, "short_desc": "gout", "long_desc": "gout"}
+{"code": "G40.909", "is_billable": true, "short_desc": "epilepsy", "long_desc": "epilepsy"}
+{"code": "I25.10", "is_billable": true, "short_desc": "coronary artery disease", "long_desc": "coronary artery disease"}
+{"code": "F41.9", "is_billable": true, "short_desc": "anxiety", "long_desc": "anxiety"}
+{"code": "N39.0", "is_billable": true, "short_desc": "urinary tract infection", "long_desc": "urinary tract infection"}
+{"code": "J18.9", "is_billable": true, "short_desc": "pneumonia", "long_desc": "pneumonia"}
+{"code": "I63.9", "is_billable": true, "short_desc": "stroke", "long_desc": "stroke"}
+{"code": "E10.9", "is_billable": true, "short_desc": "type 1 diabetes mellitus", "long_desc": "type 1 diabetes mellitus"}
+{"code": "I11.9", "is_billable": true, "short_desc": "hypertensive heart disease", "long_desc": "hypertensive heart disease"}
+{"code": "I27.20", "is_billable": true, "short_desc": "pulmonary hypertension", "long_desc": "pulmonary hypertension"}
+{"code": "E78.00", "is_billable": true, "short_desc": "pure hypercholesterolemia", "long_desc": "pure hypercholesterolemia"}
+{"code": "J43.9", "is_billable": true, "short_desc": "emphysema", "long_desc": "emphysema"}
+{"code": "I26.99", "is_billable": true, "short_desc": "pulmonary embolism", "long_desc": "pulmonary embolism"}
+{"code": "J30.9", "is_billable": true, "short_desc": "allergic rhinitis", "long_desc": "allergic rhinitis"}
+{"code": "G20", "is_billable": true, "short_desc": "Parkinson's disease", "long_desc": "Parkinson's disease"}
+{"code": "G43.909", "is_billable": true, "short_desc": "migraine", "long_desc": "migraine"}
+{"code": "G30.9", "is_billable": true, "short_desc": "Alzheimer's disease", "long_desc": "Alzheimer's disease"}
+{"code": "G35", "is_billable": true, "short_desc": "multiple sclerosis", "long_desc": "multiple sclerosis"}
+{"code": "K50.90", "is_billable": true, "short_desc": "Crohn's disease", "long_desc": "Crohn's disease"}
+{"code": "K74.60", "is_billable": true, "short_desc": "liver cirrhosis", "long_desc": "liver cirrhosis"}
+{"code": "K85.90", "is_billable": true, "short_desc": "acute pancreatitis", "long_desc": "acute pancreatitis"}
+{"code": "K25.9", "is_billable": true, "short_desc": "gastric ulcer", "long_desc": "gastric ulcer"}
+{"code": "N18.3", "is_billable": true, "short_desc": "chronic kidney disease stage 3", "long_desc": "chronic kidney disease stage 3"}
+{"code": "N20.0", "is_billable": true, "short_desc": "nephrolithiasis", "long_desc": "nephrolithiasis"}
+{"code": "N18.4", "is_billable": true, "short_desc": "chronic kidney disease stage 4", "long_desc": "chronic kidney disease stage 4"}
+{"code": "N18.9", "is_billable": true, "short_desc": "chronic kidney disease", "long_desc": "chronic kidney disease"}
+{"code": "E05.90", "is_billable": true, "short_desc": "hyperthyroidism", "long_desc": "hyperthyroidism"}
+{"code": "E21.3", "is_billable": true, "short_desc": "hyperparathyroidism", "long_desc": "hyperparathyroidism"}
+{"code": "E27.40", "is_billable": true, "short_desc": "adrenal insufficiency", "long_desc": "adrenal insufficiency"}
+{"code": "F32.9", "is_billable": true, "short_desc": "major depressive disorder", "long_desc": "major depressive disorder"}
+{"code": "F31.9", "is_billable": true, "short_desc": "bipolar disorder", "long_desc": "bipolar disorder"}
+{"code": "F43.10", "is_billable": true, "short_desc": "PTSD", "long_desc": "PTSD"}
+{"code": "F20.9", "is_billable": true, "short_desc": "schizophrenia", "long_desc": "schizophrenia"}
+{"code": "F90.9", "is_billable": true, "short_desc": "ADHD", "long_desc": "ADHD"}
+{"code": "M19.90", "is_billable": true, "short_desc": "osteoarthritis", "long_desc": "osteoarthritis"}
+{"code": "M81.0", "is_billable": true, "short_desc": "osteoporosis", "long_desc": "osteoporosis"}
+{"code": "M06.9", "is_billable": true, "short_desc": "rheumatoid arthritis", "long_desc": "rheumatoid arthritis"}
+{"code": "M54.50", "is_billable": true, "short_desc": "low back pain", "long_desc": "low back pain"}
+{"code": "A41.9", "is_billable": true, "short_desc": "sepsis", "long_desc": "sepsis"}
+{"code": "L03.90", "is_billable": true, "short_desc": "cellulitis", "long_desc": "cellulitis"}
+{"code": "B20", "is_billable": true, "short_desc": "HIV", "long_desc": "HIV"}
+{"code": "A04.72", "is_billable": true, "short_desc": "C. diff", "long_desc": "C. diff"}
+{"code": "B18.2", "is_billable": true, "short_desc": "chronic hepatitis C", "long_desc": "chronic hepatitis C"}
+{"code": "D50.9", "is_billable": true, "short_desc": "iron deficiency anemia", "long_desc": "iron deficiency anemia"}
+{"code": "L20.9", "is_billable": true, "short_desc": "atopic dermatitis", "long_desc": "atopic dermatitis"}
+{"code": "L40.0", "is_billable": true, "short_desc": "psoriasis", "long_desc": "psoriasis"}
+{"code": "M79.10", "is_billable": true, "short_desc": "myalgia", "long_desc": "myalgia"}
+{"code": "M79.7", "is_billable": true, "short_desc": "fibromyalgia", "long_desc": "fibromyalgia"}
+{"code": "N40.1", "is_billable": true, "short_desc": "BPH", "long_desc": "BPH"}
+{"code": "Z87.891", "is_billable": true, "short_desc": "history of tobacco use", "long_desc": "history of tobacco use"}
+{"code": "K59.00", "is_billable": true, "short_desc": "constipation", "long_desc": "constipation"}
+{"code": "H40.9", "is_billable": true, "short_desc": "glaucoma", "long_desc": "glaucoma"}
+{"code": "H25.9", "is_billable": true, "short_desc": "cataracts", "long_desc": "cataracts"}
+{"code": "F10.20", "is_billable": true, "short_desc": "alcohol use disorder", "long_desc": "alcohol use disorder"}
+{"code": "F11.20", "is_billable": true, "short_desc": "opioid use disorder", "long_desc": "opioid use disorder"}
+{"code": "F17.210", "is_billable": true, "short_desc": "tobacco use disorder", "long_desc": "tobacco use disorder"}
+{"code": "E79.0", "is_billable": true, "short_desc": "hyperuricemia", "long_desc": "hyperuricemia"}
+{"code": "D51.0", "is_billable": true, "short_desc": "vitamin B12 deficiency anemia", "long_desc": "vitamin B12 deficiency anemia"}
+{"code": "G62.9", "is_billable": true, "short_desc": "polyneuropathy", "long_desc": "polyneuropathy"}
+{"code": "I83.90", "is_billable": true, "short_desc": "varicose veins", "long_desc": "varicose veins"}
+{"code": "R03.0", "is_billable": true, "short_desc": "elevated blood pressure", "long_desc": "elevated blood pressure"}
+{"code": "R73.03", "is_billable": true, "short_desc": "prediabetes", "long_desc": "prediabetes"}
+{"code": "I95.9", "is_billable": true, "short_desc": "hypotension", "long_desc": "hypotension"}
+{"code": "K58.0", "is_billable": true, "short_desc": "IBS with diarrhea", "long_desc": "IBS with diarrhea"}
+{"code": "A00", "is_billable": true, "short_desc": "A00", "long_desc": "A00"}
+{"code": "A00.0", "is_billable": true, "short_desc": "A00.0", "long_desc": "A00.0"}
+{"code": "A00.1", "is_billable": true, "short_desc": "A00.1", "long_desc": "A00.1"}
+{"code": "A02", "is_billable": true, "short_desc": "A02", "long_desc": "A02"}
+{"code": "A02.1", "is_billable": true, "short_desc": "A02.1", "long_desc": "A02.1"}
+{"code": "E11", "is_billable": true, "short_desc": "E11", "long_desc": "E11"}
+{"code": "Z99.999", "is_billable": true, "short_desc": "Z99.999", "long_desc": "Z99.999"}

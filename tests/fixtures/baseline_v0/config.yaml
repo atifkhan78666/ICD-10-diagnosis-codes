@@ -1,0 +1,41 @@
+data:
+  synthetic_dir: tests/fixtures/baseline_v0
+decoding:
+  batch_size: 1
+  do_sample: false
+  max_new_tokens: 256
+kg:
+  hierarchy_path: tests/fixtures/baseline_v0/hierarchy.jsonl
+models:
+  mock:
+    backend: mock
+    context_limit: 8192
+    model_id: mock
+    template_mode: system
+retrieval:
+  embedder: sentence-transformers/all-MiniLM-L6-v2
+  embedding_format: '{code}: {long_desc}'
+  index_dir: tests/fixtures/baseline_v0/index
+  note_window_overlap: 30
+  note_window_words: 150
+seed: 42
+strategies:
+  few_shot:
+    k: 5
+    min_implicit: 0
+    type: few_shot
+  kg:
+    k: 20
+    max_children: 5
+    seed_k: 10
+    type: kg
+  rag:
+    k: 20
+    per_query_m: 30
+    type: rag
+  zero_shot:
+    type: zero_shot
+vocab:
+  fiscal_year: '2024'
+  processed_jsonl: tests/fixtures/baseline_v0/vocab.jsonl
+  vocab_path: tests/fixtures/baseline_v0/vocab.jsonl

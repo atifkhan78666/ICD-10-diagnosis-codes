@@ -1,0 +1,8 @@
+{"code": "A00", "desc": "Cholera", "parent": null, "children": ["A00.0", "A00.1"]}
+{"code": "A00.0", "desc": "Cholera due to Vibrio cholerae 01, biovar cholerae", "parent": "A00", "children": []}
+{"code": "A00.1", "desc": "Cholera due to Vibrio cholerae 01, biovar eltor", "parent": "A00", "children": []}
+{"code": "A02", "desc": "Other salmonella infections", "parent": null, "children": ["A02.1"]}
+{"code": "A02.1", "desc": "Salmonella sepsis", "parent": "A02", "children": []}
+{"code": "I10", "desc": "Essential (primary) hypertension", "parent": null, "children": []}
+{"code": "E11", "desc": "Type 2 diabetes mellitus", "parent": null, "children": ["E11.9"]}
+{"code": "E11.9", "desc": "Type 2 diabetes mellitus without complications", "parent": "E11", "children": []}

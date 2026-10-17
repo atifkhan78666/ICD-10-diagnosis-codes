@@ -1,0 +1,6 @@
+| Model | Strategy | n | Precision | Recall | Micro-F1 | Macro-F1 | P@5 | P@8 | Invalid Code Rate |
+|---|---|---|---|---|---|---|---|---|---|
+| mock | Zero-Shot | 20 | 0.100 | 0.065 | 0.078 | 0.011 | n/a | n/a | 0.0% |
+| mock | Few-Shot (k=5) | 20 | 0.100 | 0.065 | 0.078 | 0.011 | n/a | n/a | 0.0% |
+| mock | RAG | 20 | 0.100 | 0.065 | 0.078 | 0.011 | n/a | n/a | 0.0% |
+| mock | KG | 20 | 0.100 | 0.065 | 0.078 | 0.011 | n/a | n/a | 0.0% |
